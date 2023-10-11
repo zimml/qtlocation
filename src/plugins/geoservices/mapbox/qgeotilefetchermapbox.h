@@ -23,7 +23,8 @@ public:
     void setMapIds(const QList<QString> &mapIds);
     void setFormat(const QString &format);
     void setAccessToken(const QString &accessToken);
-
+    void setAccount(const QString& account);
+    
 private:
     QGeoTiledMapReply *getTileImage(const QGeoTileSpec &spec) override;
 
@@ -33,6 +34,7 @@ private:
     QString m_replyFormat;
     QString m_accessToken;
     QList<QString> m_mapIds;
+    QString m_account;
     int m_scaleFactor;
 };
 
