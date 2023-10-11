@@ -10,7 +10,7 @@
 
 QT_BEGIN_NAMESPACE
 
-static const QString mapboxTilesApiPath = QStringLiteral("http://api.mapbox.com/styles/v1/mapbox/");
+static const QString mapboxTilesApiPath = QStringLiteral("http://api.mapbox.com/styles/v1/");
 
 // https://www.mapbox.com/api-documentation/#geocoding
 static const QString mapboxGeocodingApiPath = QStringLiteral("https://api.mapbox.com/geocoding/v5/mapbox.places/");
