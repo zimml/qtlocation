@@ -57,12 +57,11 @@ QGeoTiledMapReply *QGeoTileFetcherMapbox::getTileImage(const QGeoTileSpec &spec)
     request.setRawHeader("User-Agent", m_userAgent);
 
     request.setUrl(QUrl(mapboxTilesApiPath +
-                        ((spec.mapId() >= m_mapIds.size()) ? QStringLiteral("mapbox.streets") : m_mapIds[spec.mapId() - 1]) + QLatin1Char('/') +
+                        ((spec.mapId() >= m_mapIds.size()) ? QStringLiteral("mapbox.streets") : m_mapIds[spec.mapId() - 1]) + QLatin1String("/tiles/") +
                         QString::number(spec.zoom()) + QLatin1Char('/') +
                         QString::number(spec.x()) + QLatin1Char('/') +
                         QString::number(spec.y()) +
-                        ((m_scaleFactor > 1) ? (QLatin1Char('@') + QString::number(m_scaleFactor) + QLatin1String("x.")) : QLatin1String(".")) +
-                        m_format + QLatin1Char('?') +
+                        ((m_scaleFactor > 1) ? (QLatin1Char('@') + QString::number(m_scaleFactor) + QLatin1String("x")) : QLatin1String()) + QLatin1Char('?') +
                         QStringLiteral("access_token=") + m_accessToken));
 
     QNetworkReply *reply = m_networkManager->get(request);

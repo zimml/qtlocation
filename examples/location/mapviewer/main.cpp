@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
     QVariantMap parameters = parseArgs(args);
     if (!parameters.contains(u"osm.useragent"_s))
         parameters.insert(u"osm.useragent"_s, QCoreApplication::applicationName());
+    parameters.insert(u"mapbox.access_token"_s, 		"pk.eyJ1IjoiemVmYXBwIiwiYSI6ImNrYjkxM2l4MjAzaGwydG53bmZ2aTdvMGsifQ.tL6uuGsfxgL0_G70o9X1Iw");
 
     QQmlApplicationEngine engine;
 #if QT_CONFIG(ssl)

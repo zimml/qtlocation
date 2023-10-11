@@ -44,11 +44,11 @@ QGeoTiledMappingManagerEngineMapbox::QGeoTiledMappingManagerEngineMapbox(const Q
     //: Noun describing map type 'Street map'
     mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("mapbox.streets"), tr("Street"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using light colors (weak contrast)
-    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("mapbox.light"), tr("Light"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
+    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("light-v11"), tr("Light"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using dark colors
-    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("mapbox.dark"), tr("Dark"), false, true, mapTypes.size() + 1, pluginName, cameraCaps);
+    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("dark-v9"), tr("Dark"), false, true, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map created by satellite
-    mapTypes << QGeoMapType(QGeoMapType::SatelliteMapDay, QStringLiteral("mapbox.satellite"), tr("Satellite"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
+    mapTypes << QGeoMapType(QGeoMapType::SatelliteMapDay, QStringLiteral("satellite-v12"), tr("Satellite"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a street map created by satellite
     mapTypes << QGeoMapType(QGeoMapType::HybridMap, QStringLiteral("mapbox.streets-satellite"), tr("Streets Satellite"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using wheat paste colors
