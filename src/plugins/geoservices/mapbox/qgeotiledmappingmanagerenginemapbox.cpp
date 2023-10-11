@@ -42,34 +42,28 @@ QGeoTiledMappingManagerEngineMapbox::QGeoTiledMappingManagerEngineMapbox(const Q
 
     // As of 2016.06.15, valid mapbox map_ids are documented at https://www.mapbox.com/api-documentation/#maps
     //: Noun describing map type 'Street map'
-    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("mapbox.streets"), tr("Street"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
+    mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("streets-v12"), tr("Street"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using light colors (weak contrast)
     mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("light-v11"), tr("Light"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using dark colors
     mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("dark-v11"), tr("Dark"), false, true, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map created by satellite
     mapTypes << QGeoMapType(QGeoMapType::SatelliteMapDay, QStringLiteral("satellite-v9"), tr("Satellite"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a street map created by satellite
-    mapTypes << QGeoMapType(QGeoMapType::HybridMap, QStringLiteral("mapbox.streets-satellite"), tr("Streets Satellite"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map using wheat paste colors
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.wheatpaste"), tr("Wheatpaste"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a basic street map
     mapTypes << QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("streets-v12"), tr("Streets Basic"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
     //: Noun describing type of a map using cartoon-style fonts
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.comic"), tr("Comic"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map for outdoor activities
     mapTypes << QGeoMapType(QGeoMapType::PedestrianMap, QStringLiteral("outdoors-v12"), tr("Outdoors"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map for sports
-    mapTypes << QGeoMapType(QGeoMapType::CycleMap, QStringLiteral("mapbox.run-bike-hike"), tr("Run Bike Hike"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map drawn by pencil
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.pencil"), tr("Pencil"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a treasure map with pirate boat watermark
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.pirates"), tr("Pirates"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map using emerald colors
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.emerald"), tr("Emerald"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-    //: Noun describing type of a map with high contrast
-    mapTypes << QGeoMapType(QGeoMapType::CustomMap, QStringLiteral("mapbox.high-contrast"), tr("High Contrast"), false, false, mapTypes.size() + 1, pluginName, cameraCaps);
-
+    
+    // Specify account name
+    QString account;
+    if (parameters.contains(QStringLiteral("mapbox.account")))
+    {
+        // None of the default map types can be used !!
+        mapTypes.clear();
+        
+        account = parameters.value(QStringLiteral("mapbox.account")).toString();
+    }
+    
     // New way to specify multiple customized map_ids via additional_map_ids
     if (parameters.contains(QStringLiteral("mapbox.mapping.additional_map_ids"))) {
         const QString ids = parameters.value(QStringLiteral("mapbox.mapping.additional_map_ids")).toString();
@@ -96,6 +90,7 @@ QGeoTiledMappingManagerEngineMapbox::QGeoTiledMappingManagerEngineMapbox(const Q
 
     QGeoTileFetcherMapbox *tileFetcher = new QGeoTileFetcherMapbox(scaleFactor, this);
     tileFetcher->setMapIds(mapIds);
+    tileFetcher->setAccount(account);    
 
     if (parameters.contains(QStringLiteral("useragent"))) {
         const QByteArray ua = parameters.value(QStringLiteral("useragent")).toString().toLatin1();
