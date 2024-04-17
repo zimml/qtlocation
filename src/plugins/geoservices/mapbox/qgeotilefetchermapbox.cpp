@@ -48,11 +48,9 @@ void QGeoTileFetcherMapbox::setAccessToken(const QString &accessToken) {
   m_accessToken = accessToken;
 }
 
-void QGeoTileFetcherMapbox::setAccount(const QString& account)
-{
+void QGeoTileFetcherMapbox::setAccount(const QString &account) {
   m_account = account;
 }
-
 
 QGeoTiledMapReply *
 QGeoTileFetcherMapbox::getTileImage(const QGeoTileSpec &spec) {
@@ -60,16 +58,17 @@ QGeoTileFetcherMapbox::getTileImage(const QGeoTileSpec &spec) {
   request.setRawHeader("User-Agent", m_userAgent);
 
   request.setUrl(
-      QUrl(mapboxTilesApiPath + (m_account.isEmpty() ? "mapbox" : m_account) + QLatin1Char('/') +
+      QUrl(mapboxTilesApiPath + (m_account.isEmpty() ? "mapbox" : m_account) +
+           QLatin1Char('/') +
            ((spec.mapId() >= m_mapIds.size()) ? QStringLiteral("streets-v12")
                                               : m_mapIds[spec.mapId() - 1]) +
            QLatin1String("/tiles/") + QString::number(spec.zoom()) +
            QLatin1Char('/') + QString::number(spec.x()) + QLatin1Char('/') +
            QString::number(spec.y()) +
            ((m_scaleFactor > 1)
-                ? (QLatin1Char('@') + QString::number(m_scaleFactor) +
-                   QLatin1String("x"))
-                : QLatin1String()) +
+                ? QString((QLatin1Char('@') + QString::number(m_scaleFactor) +
+                           QLatin1String("x")))
+                : QString()) +
            QLatin1Char('?') + QStringLiteral("access_token=") + m_accessToken));
 
   QNetworkReply *reply = m_networkManager->get(request);
