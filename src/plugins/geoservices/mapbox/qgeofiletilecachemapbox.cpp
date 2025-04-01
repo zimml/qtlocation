@@ -55,28 +55,40 @@ QString QGeoFileTileCacheMapbox::tileSpecToFilename(const QGeoTileSpec &spec, co
 
 QGeoTileSpec QGeoFileTileCacheMapbox::filenameToTileSpec(const QString &filename) const
 {
+    // Split the filename into its parts using the dot separator for map name and
+    // extension
     QStringList parts = filename.split('.');
 
-    if (parts.length() != 3) // 3 because the map name has always a dot in it.
+    if (parts.length() != 2) // Expecting two parts: map name and format
         return QGeoTileSpec();
 
-    const QString name = parts.at(0) + QChar('.') + parts.at(1);
+    const QString name = parts.at(0);   // Map name with possible hyphens
+    const QString format = parts.at(1); // File extension (e.g., png, jpeg)
+
+    // Now, split the map name by hyphens
     const QStringList fields = name.split('-');
 
     const qsizetype length = fields.length();
+
+    // Validate length of the fields (length 6 for no version, 7 with version)
     if (length != 6 && length != 7)
         return QGeoTileSpec();
-    const qsizetype scaleIdx = fields.last().indexOf("@");
-    if (scaleIdx < 0 || fields.last().size() <= (scaleIdx + 2))
-        return QGeoTileSpec();
-    const int scaleFactor = fields.last()[scaleIdx + 1].digitValue();
-    if (scaleFactor != m_scaleFactor)
-        return QGeoTileSpec();
 
-    QList<int> numbers;
+    // Parse the scale factor (last part should contain the @scaleFactor)
+    const qsizetype scaleIdx = fields.last().indexOf("@");
+    if (scaleIdx < 0 || fields.last().size() <= (scaleIdx + 1))
+        return QGeoTileSpec();
 
     bool ok = false;
-    for (qsizetype i = 2; i < length - 1; ++i) { // skipping -@_X
+    int scaleFactor = fields.last()[scaleIdx + 1].digitValue(); // Assuming scale factor is one digit.
+    if (scaleFactor != m_scaleFactor)
+        return QGeoTileSpec(); // Scale factor mismatch
+
+    // Collect zoom, x, y, and optionally version
+    QList<int> numbers;
+
+    // Extract zoom, x, y from the fields
+    for (qsizetype i = 2; i < length - 1; ++i) { // Skipping the scale factor at the end
         ok = false;
         int value = fields.at(i).toInt(&ok);
         if (!ok)
@@ -84,10 +96,11 @@ QGeoTileSpec QGeoFileTileCacheMapbox::filenameToTileSpec(const QString &filename
         numbers.append(value);
     }
 
-    //File name without version, append default
+    // If the version part is missing, assume it to be -1 (default version)
     if (numbers.length() < 4)
         numbers.append(-1);
 
+    // Return a QGeoTileSpec constructed from parsed data
     return QGeoTileSpec(fields.at(0),
                     m_mapNameToId[fields.at(1)],
                     numbers.at(0),
